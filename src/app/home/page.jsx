@@ -1,5 +1,7 @@
+'use client';
+
 /**
- * SCHOLAR — Production-Ready Study App
+ * Read2Rise — Production-Ready Study App
  * ─────────────────────────────────────
  * • AI powered by xAI Grok (grok-3-latest via api.x.ai)
  * • Authentication: Sign In / Sign Up with localStorage persistence
@@ -14,13 +16,13 @@ import { QRCodeSVG } from "qrcode.react";
 
 // ─── GROK API CONFIG ─────────────────────────────────────────────────────────
 const GROK_API = {
-  endpoint: "https://api.x.ai/v1/chat/completions",
-  model: "grok-3-latest",
+  endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+  model: "gemini-2.5-flash",
   // API key should be set via environment variable: VITE_GROK_API_KEY
-  // For Next.js: process.env.NEXT_PUBLIC_GROK_API_KEY
+  // For Next.js: process.env.GEMINI_API_KEY
   // For production, NEVER expose API key in client-side code — proxy through /api/chat
   getKey: () =>
-    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_GROK_API_KEY) ||
+    (typeof process !== "undefined" && process.env?.GEMINI_API_KEY) ||
     (typeof import.meta !== "undefined" && import.meta.env?.VITE_GROK_API_KEY) ||
     "", // Replace with your key during local dev only
 };
@@ -367,7 +369,7 @@ const PWAInstallBanner = ({ onClose }) => {
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 3 }}>Install SCHOLAR</div>
             <div style={{ fontSize: 12, color: T.textSec, marginBottom: 12 }}>Add to home screen for the best experience — works offline too.</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-start" }}>
-              <QRCodeSVG value="https://yourapp.com" size={100} />
+              <QRCodeSVG value="https://read2rise.vercel.app/" size={100} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 11, color: T.textMut, marginBottom: 8 }}>Scan to install on mobile, or tap below on Chrome:</div>
                 {installed
@@ -453,7 +455,7 @@ const AuthScreen = ({ onAuth }) => {
             </div>
             <span style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", color: T.textPri }}>SCHOLAR</span>
           </div>
-          <p style={{ fontSize: 13, color: T.textSec }}>Powered by Grok AI · Your learning system</p>
+          <p style={{ fontSize: 13, color: T.textSec }}>Powered by Gemini · Your learning system</p>
         </div>
 
         {/* Tabs */}
@@ -497,7 +499,7 @@ const AuthScreen = ({ onAuth }) => {
             <Icon d={Icons.smartphone} size={14} color={T.accent} /> Install on your phone — scan to download
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <QRCodeSVG value="https://yourapp.com" size={100} />
+            <QRCodeSVG value="https://read2rise.vercel.app/" size={100} />
           </div>
           <div style={{ fontSize: 11, color: T.textMut, marginTop: 10 }}>
             Open in Chrome → Menu → "Add to Home Screen"
@@ -601,7 +603,7 @@ const Onboarding = ({ user, onComplete }) => {
 // ─── MENTOR AI CHAT (Grok-powered) ──────────────────────────────────────────
 const MentorChat = ({ user }) => {
   const [msgs, setMsgs] = useState([
-    { role: "assistant", text: `Hey ${user.name} 👋 I'm your Scholar Mentor — powered by Grok AI. I've looked at your profile and I already know what we need to work on. You mentioned ${user.challenge?.toLowerCase() || "getting ahead"} is your biggest battle right now — that's the most honest thing someone can tell me. Let's start there. What subject is giving you the most trouble this week?`, time: "now" }
+    { role: "assistant", text: `Hey ${user.name} 👋 I'm your Read2Rise Mentor — powered by Gemini. I've looked at your profile and I already know what we need to work on. You mentioned ${user.challenge?.toLowerCase() || "getting ahead"} is your biggest battle right now — that's the most honest thing someone can tell me. Let's start there. What subject is giving you the most trouble this week?`, time: "now" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -625,7 +627,7 @@ const MentorChat = ({ user }) => {
     const history = [...msgs, userMsg].map(m => ({ role: m.role, content: m.text }));
 
     try {
-      const systemPrompt = `You are the Scholar Mentor AI — not a chatbot, but a genuine human-level mentor built into the SCHOLAR educational platform, powered by Grok.
+      const systemPrompt = `You are the Read2Rise Mentor AI — not a chatbot, but a genuine human-level mentor built into the Read2Rise educational platform, powered by Gemini.
 
 ABOUT THIS USER:
 - Name: ${user.name}
@@ -665,8 +667,8 @@ Always be warm, specific, and human. Never robotic. Max 3 paragraphs unless teac
           <div style={{ position: "absolute", bottom: 0, right: 0, width: 10, height: 10, background: T.green, borderRadius: "50%", border: `2px solid ${T.card}` }} />
         </div>
         <div>
-          <div style={{ fontWeight: 700, fontSize: 15, color: T.textPri }}>Scholar Mentor</div>
-          <div style={{ fontSize: 12, color: T.green }}>● Powered by Grok AI</div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: T.textPri }}>Read2Rise Mentor</div>
+          <div style={{ fontSize: 12, color: T.green }}>● Powered by Gemini</div>
         </div>
         <div style={{ marginLeft: "auto" }}>
           <Badge color={T.accent}>Grok AI</Badge>
@@ -755,7 +757,7 @@ const Dashboard = ({ user }) => {
               Good evening, {user.name} 👋
             </h1>
             <p style={{ fontSize: 14, color: T.textSec, marginTop: 4 }}>
-              Your Scholar Score is up <span style={{ color: T.green, fontWeight: 700 }}>+14 points</span> this week. Keep going.
+              Your Read2Rise Score is up <span style={{ color: T.green, fontWeight: 700 }}>+14 points</span> this week. Keep going.
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -766,7 +768,7 @@ const Dashboard = ({ user }) => {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 14, marginBottom: 24 }}>
-        <StatCard label="Scholar Score" value="847" delta={14} icon={<Icon d={Icons.star} size={16} />} color={T.accent} />
+        <StatCard label="Read2Rise Score" value="847" delta={14} icon={<Icon d={Icons.star} size={16} />} color={T.accent} />
         <StatCard label="Study Hours" value="32.5h" delta={8} icon={<Icon d={Icons.clock} size={16} />} color={T.green} />
         <StatCard label="Focus Quality" value="78%" delta={5} icon={<Icon d={Icons.target} size={16} />} color={T.amber} />
         <StatCard label="Quiz Avg" value="81%" delta={3} icon={<Icon d={Icons.brain} size={16} />} color="#A78BFA" />
@@ -824,7 +826,7 @@ const Dashboard = ({ user }) => {
       </Card>
 
       <div style={{ marginBottom: 8 }}>
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: T.textSec }}>SCHOLAR INSIGHTS</h3>
+        <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 14, color: T.textSec }}>Read2Rise INSIGHTS</h3>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {insights.map((ins, i) => (
             <Card key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
@@ -940,7 +942,7 @@ const QuizModule = ({ user }) => {
     if (!topic.trim()) return;
     setLoading(true); setPhase("generating");
     try {
-      const systemPrompt = `You are SCHOLAR's Quiz Engine powered by Grok AI. Generate quiz questions calibrated to this student:
+      const systemPrompt = `You are SCHOLAR's Quiz Engine powered by Gemini. Generate quiz questions calibrated to this student:
 - Level: ${user.level}
 - Biggest challenge: ${user.challenge}
 Return ONLY valid JSON, no markdown, no backticks. Format: {"questions":[{"q":"question","options":["A","B","C","D"],"correct":0,"explanation":"why this is correct"}]}
@@ -1063,7 +1065,7 @@ const Library = () => {
   const [search, setSearch] = useState("");
   const resources = [
     { title: "Complete Guide to Organic Chemistry", author: "Dr. Amara K.", subject: "Chemistry", level: "Undergraduate", rating: 4.9, downloads: 2341, type: "📄 Notes" },
-    { title: "WAEC Mathematics Past Questions 2015–2024", author: "Scholar Community", subject: "Mathematics", level: "Secondary", rating: 4.8, downloads: 8920, type: "📝 Past Papers" },
+    { title: "WAEC Mathematics Past Questions 2015–2024", author: "Read2Rise Community", subject: "Mathematics", level: "Secondary", rating: 4.8, downloads: 8920, type: "📝 Past Papers" },
     { title: "Crash Course: Newton's Laws of Motion", author: "Liam T.", subject: "Physics", level: "Secondary", rating: 4.7, downloads: 1560, type: "📖 Summary" },
     { title: "Essay Writing Framework for A-Levels", author: "Sophie W.", subject: "English", level: "Secondary", rating: 4.9, downloads: 3100, type: "📄 Template" },
     { title: "Fundamentals of Machine Learning", author: "Yui S.", subject: "Computer Science", level: "Undergraduate", rating: 4.6, downloads: 980, type: "📚 Guide" },
@@ -1076,7 +1078,7 @@ const Library = () => {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4, flexWrap: "wrap", gap: 10 }}>
         <div>
           <h2 style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em" }}>Open Library</h2>
-          <p style={{ fontSize: 14, color: T.textSec }}>Free knowledge from the global Scholar community.</p>
+          <p style={{ fontSize: 14, color: T.textSec }}>Free knowledge from the global Read2Rise community.</p>
         </div>
         <Btn size="sm" icon={<Icon d={Icons.upload} size={14} color={T.white} />}>Contribute</Btn>
       </div>
@@ -1141,12 +1143,12 @@ const Rewards = ({ user }) => {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
         <Card style={{ textAlign: "center" }}>
           <div style={{ fontSize: 24, fontWeight: 900, color: T.accent }}>2,840</div>
-          <div style={{ fontSize: 12, color: T.textSec, marginTop: 4 }}>Scholar Coins</div>
+          <div style={{ fontSize: 12, color: T.textSec, marginTop: 4 }}>Read2Rise Coins</div>
           <div style={{ fontSize: 11, color: T.green, marginTop: 4 }}>↑ +340 this week</div>
         </Card>
         <Card style={{ textAlign: "center" }}>
           <div style={{ fontSize: 24, fontWeight: 900, color: T.gold }}>847</div>
-          <div style={{ fontSize: 12, color: T.textSec, marginTop: 4 }}>Scholar Score</div>
+          <div style={{ fontSize: 12, color: T.textSec, marginTop: 4 }}>Read2Rise Score</div>
           <div style={{ fontSize: 11, color: T.green, marginTop: 4 }}>Rank #1,204 globally</div>
         </Card>
       </div>
@@ -1245,7 +1247,7 @@ const ProfilePage = ({ user, onUpdate, onLogout }) => {
   };
 
   const stats = [
-    { label: "Scholar Score", value: "847", color: T.accent },
+    { label: "Read2Rise Score", value: "847", color: T.accent },
     { label: "Study Hours", value: "32.5h", color: T.green },
     { label: "Streak", value: "14d", color: T.gold },
     { label: "Quiz Avg", value: "81%", color: "#A78BFA" },
@@ -1254,7 +1256,7 @@ const ProfilePage = ({ user, onUpdate, onLogout }) => {
   return (
     <div className="main-content-pad" style={{ padding: 24, overflowY: "auto", height: "100%" }}>
       <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4, letterSpacing: "-0.02em" }}>My Profile</h2>
-      <p style={{ fontSize: 14, color: T.textSec, marginBottom: 24 }}>Your Scholar identity and learning history.</p>
+      <p style={{ fontSize: 14, color: T.textSec, marginBottom: 24 }}>Your Read2Rise identity and learning history.</p>
 
       {/* Avatar + Name */}
       <Card style={{ marginBottom: 20, display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap" }}>
@@ -1399,7 +1401,7 @@ const SettingsPage = ({ user, onUpdate }) => {
   return (
     <div className="main-content-pad" style={{ padding: 24, overflowY: "auto", height: "100%" }}>
       <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4, letterSpacing: "-0.02em" }}>Settings</h2>
-      <p style={{ fontSize: 14, color: T.textSec, marginBottom: 24 }}>Control how SCHOLAR works for you.</p>
+      <p style={{ fontSize: 14, color: T.textSec, marginBottom: 24 }}>Control how Read2Rise works for you.</p>
 
       {sections.map(sec => (
         <div key={sec.title} style={{ marginBottom: 24 }}>
@@ -1445,7 +1447,7 @@ const SettingsPage = ({ user, onUpdate }) => {
         <Card>
           <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Install SCHOLAR on Chrome</div>
+              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Install Read2Rise on Chrome</div>
               <div style={{ fontSize: 12, color: T.textSec, marginBottom: 12, lineHeight: 1.6 }}>
                 Open Chrome → click the ⋮ menu → "Install SCHOLAR..." or scan the QR code from your phone.
               </div>
@@ -1455,7 +1457,7 @@ const SettingsPage = ({ user, onUpdate }) => {
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-              <QRCodeSVG value="https://yourapp.com" size={100} />
+              <QRCodeSVG value="https://read2rise.vercel.app/" size={100} />
               <div style={{ fontSize: 10, color: T.textMut }}>Scan to install</div>
             </div>
           </div>
@@ -1476,7 +1478,7 @@ const SettingsPage = ({ user, onUpdate }) => {
           </div>
           <div style={{ padding: "16px 20px" }}>
             <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>App version</div>
-            <div style={{ fontSize: 13, color: T.textSec }}>SCHOLAR v2.0.0 · Grok-powered</div>
+            <div style={{ fontSize: 13, color: T.textSec }}>Read2Rise v2.0.0 · Gemini-powered</div>
           </div>
         </Card>
       </div>
@@ -1688,7 +1690,7 @@ PRODUCTION DEPLOYMENT GUIDE
 
 1. GROK API KEY
    - Get your key at https://console.x.ai
-   - For Next.js: add NEXT_PUBLIC_GROK_API_KEY=xai-xxx to .env.local
+   - For Next.js: add GEMINI_API_KEY=xai-xxx to .env.local
    - For Vite: add VITE_GROK_API_KEY=xai-xxx to .env
    ⚠️ For production: create /api/chat route to proxy requests server-side
       to avoid exposing your key in the browser.
